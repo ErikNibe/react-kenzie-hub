@@ -6,12 +6,20 @@ import { Button } from "../../styles/Button";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const DashboardPage = ({ userInfo, isLogged, setIsLogged }) => {
+export const DashboardPage = ({ userInfo, isLogged, setIsLogged, setUserInfo }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
         !isLogged && navigate("/login");
-    }, [isLogged])
+    }, [isLogged]);
+
+    const handleLogout = () => {
+        window.localStorage.clear();
+
+        setUserInfo([]);
+
+        setIsLogged(false);
+    }
 
     return (
         <>
@@ -19,7 +27,7 @@ export const DashboardPage = ({ userInfo, isLogged, setIsLogged }) => {
                 <div>
                     <ImgLogo src={Logo} alt="Logo"/>
 
-                    <Button btnType={"black"} btnSize={"small"} onClick={() => setIsLogged(false)}>Sair</Button>
+                    <Button btnType={"black"} btnSize={"small"} onClick={() => handleLogout()}>Sair</Button>
                 </div>
             </Navbar>
 
