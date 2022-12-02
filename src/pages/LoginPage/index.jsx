@@ -5,30 +5,28 @@ import { FormContainer } from "../../styles/FormContainer";
 import { Input } from "../../styles/Input";
 import { LabelText } from "../../styles/Label";
 import { Button } from "../../styles/Button";
+import { Anchor } from "../../styles/Anchor";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "./loginSchema";
 
 import { api } from "../../api/api";
-import { useState } from "react";
 
 import { toast } from "react-toastify";
 
 import { useNavigate } from "react-router-dom";
 import { ImgLogo } from "../../styles/ImgLogo";
 
-export const LoginPage = () => {
+import { useState } from "react";
+
+export const LoginPage = ({ setUserInfo, setIsLogged }) => {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
-
+    
     const { register, handleSubmit, reset, formState: {errors} } = useForm({
         mode: "onChange",
-        defaultValues: {
-            email: "gabriel@kenzie.com.br",
-            password: "123456"
-        },
         resolver: yupResolver(loginSchema)
     });
 
@@ -37,20 +35,29 @@ export const LoginPage = () => {
             setLoading(true);
 
             const response = await api.post("/sessions", data);
-            
-            if(response.status === 200){
-                toast.success("Login realizado com sucesso");
 
+            if(response.status === 200){
+                toast.success("Login realizado com sucesso, você será redirecionado automaticamente");
+                
                 window.localStorage.clear();
                 window.localStorage.setItem("@TOKEN", response.data.token);
                 window.localStorage.setItem("@USERID", response.data.user.id);
+                
+                setIsLogged(true);
+                setUserInfo(response.data.user);
+
+                setTimeout(() => navigate("/dashboard"), 4000);
             }
             
 
         } catch (error) {
-            toast.error("O email ou a senha estão incorretos")
+
+            toast.error("O email ou a senha estão incorretos");
+
         } finally {
-            setLoading(false)
+
+            setLoading(false);
+            
         }
     }
     
@@ -63,7 +70,7 @@ export const LoginPage = () => {
     return (
         <Container>
             
-            <ImgLogo src={Logo} alt="Logo"/>
+            <ImgLogo src={Logo} alt="Logo" page={"loginPage"}/>
 
             <FormContainer noValidate onSubmit={handleSubmit(submit)}>
                 <h2>Login</h2>
@@ -92,7 +99,7 @@ export const LoginPage = () => {
 
                 <span>Ainda não possui uma conta?</span>
 
-                <Button btnType={"gray"} btnSize={"big"} type="button" onClick={() => navigate("/register")}>Cadastre-se</Button>
+                <Anchor btnType={"gray"} btnSize={"big"} type="button" onClick={() => navigate("/register")}>Cadastre-se</Anchor>
             </FormContainer>
         </Container>
     )

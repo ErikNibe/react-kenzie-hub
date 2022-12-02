@@ -13,6 +13,8 @@ import { Button } from "../../styles/Button";
 import { FormContainer } from "../../styles/FormContainer";
 import { LabelText } from "../../styles/Label";
 import { Input } from "../../styles/Input";
+import { Anchor } from "../../styles/Anchor";
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
@@ -24,16 +26,6 @@ export const RegisterPage = () => {
 
     const { register, handleSubmit, reset, formState: {errors} } = useForm({
         mode: "onChange",
-
-        defaultValues: {
-            name: "erik",
-            email: "erik@mail.com",
-            password: "32181691860e*",
-            confirmPassword: "32181691860e*",
-            bio: "Ola mundo",
-            contact: "123456789"
-        },
-
         resolver: yupResolver(loginSchema)
     })
 
@@ -44,14 +36,18 @@ export const RegisterPage = () => {
             const response = await api.post("/users", data);
             
             if(response.data){
-                toast.success("Conta criada com sucesso");
+                toast.success("Conta criada com sucesso, você será redirecionado para a página de login automaticamente");
 
-                navigate("/login");
+                setTimeout(() => navigate("/login"), 4000)
             }
         } catch (error) {
+
             toast.error("Ops! Algo deu errado");
+
         } finally {
+
             setLoading(false);
+            
         }
     }
 
@@ -59,6 +55,8 @@ export const RegisterPage = () => {
         delete data.confirmPassword;
 
         await userRegister(data);
+
+        reset();
     }
 
     return (
@@ -66,7 +64,7 @@ export const RegisterPage = () => {
             <HeaderContainer>
                 <ImgLogo src={Logo} alt="Logo" />
 
-                <Button btnType={"black"} btnSize={"small"} onClick={() => navigate("/login")}>Voltar</Button>
+                <Anchor btnType={"black"} btnSize={"medium"} onClick={() => navigate("/login")}>Voltar</Anchor>
             </HeaderContainer>
 
             <FormContainer onSubmit={handleSubmit(submit)}>
