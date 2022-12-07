@@ -79,6 +79,26 @@ export const Button = styled.button`
                     font-size: 12px;
                     color: var(--gray0);
                 `
+            case "modal-wine":
+                return css`
+                    width: 60%;
+                    height: 48px;
+                    padding: 0 22px;
+
+                    font-weight: 500;
+                    font-size: 16px;
+                    color: #FFFFFF;
+                `
+            case "modal-gray":
+                return css`
+                    width: 30%;
+                    height: 48px;
+                    padding: 0 22px;
+
+                    font-weight: 500;
+                    font-size: 16px;
+                    color: #FFFFFF;
+                `
         }
     }}
 `

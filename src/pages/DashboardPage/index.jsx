@@ -1,48 +1,100 @@
 import Logo from "../../assets/Logo.svg";
+import Bin from "../../assets/Bin.svg";
 
-import { Header, Main, Navbar } from "./styles";
-import { ImgLogo } from "../../styles/ImgLogo"
+import {
+  BtnAdd,
+  BtnRemove,
+  Header,
+  Main,
+  Navbar,
+  TechContainer,
+  TechItem,
+  TechList,
+} from "./styles";
+import { ImgLogo } from "../../styles/ImgLogo";
 import { Button } from "../../styles/Button";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Modal } from "../../components/Modal/Modal";
 
-export const DashboardPage = ({ userInfo, isLogged, setIsLogged, setUserInfo }) => {
-    const navigate = useNavigate();
+import { Navigate } from "react-router-dom";
 
-    useEffect(() => {
-        !isLogged && navigate("/login");
-    }, [isLogged]);
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
-    const handleLogout = () => {
-        window.localStorage.clear();
+export const DashboardPage = () => {
 
-        setUserInfo([]);
+  const { userInfo, setUserInfo } = useContext(AuthContext);
+  
+  const [addTechs, setAddTechs] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-        setIsLogged(false);
-    }
+  const [techInfo, setTechInfo] = useState(null)
+  
+  const handleLogout = () => {
+    localStorage.clear();
 
-    return (
-        <>
-            <Navbar>
-                <div>
-                    <ImgLogo src={Logo} alt="Logo"/>
+    setUserInfo(null);
+  };
 
-                    <Button btnType={"black"} btnSize={"small"} onClick={() => handleLogout()}>Sair</Button>
-                </div>
-            </Navbar>
+  return (
+    <>
+      <Navbar>
+        <div>
+          <ImgLogo src={Logo} alt="Logo" />
 
-            <Header>
-                <div>
-                    <p>Olá, {userInfo.name}</p>
+          <Button
+            btnType={"black"}
+            btnSize={"small"}
+            onClick={() => handleLogout()}
+          >
+            Sair
+          </Button>
+        </div>
+      </Navbar>
 
-                    <span>{userInfo.course_module}</span>
-                </div>
-            </Header>
+      <Header>
+        <div>
+          <p>Olá, {userInfo.name}</p>
 
-            <Main>
-                <p>Que pena! Estamos em desenvolvimento :(</p>
-                <span>Nossa aplicação está em desenvolviemnto, em breve teremos novidades</span>
-            </Main>
-        </>
-    )
-}
+          <span>{userInfo.course_module}</span>
+        </div>
+      </Header>
+
+      <Main>
+
+        <TechContainer>
+          <div>
+            <h3>Tecnologias</h3>
+
+            <BtnAdd onClick={() => {
+              setAddTechs(true) 
+              setOpenModal(true)
+            }}>+</BtnAdd>
+          </div>
+
+          {userInfo.techs.length === 0 ?
+            <p>Você ainda não tem nenhuma tecnologia cadastrada</p>
+          :
+            <TechList>
+              {userInfo.techs.map((tech) => (
+                <TechItem key={tech.id} onClick={() => {
+                  setOpenModal(true);
+                  setTechInfo(tech);
+                }}>
+                  <h4>{tech.title}</h4>
+
+                  <div>
+                    <span>{tech.status}</span>
+
+                    <BtnRemove><img src={Bin} alt="Lixeira" className="bin" /></BtnRemove>
+                  </div>
+              </TechItem>
+              ))}
+            </TechList>
+          }
+        </TechContainer>
+      </Main>
+
+      { openModal && <Modal addTechs={addTechs} setAddTechs={setAddTechs} setOpenModal={setOpenModal} techInfo={techInfo} setTechInfo={setTechInfo}/>}
+    </>
+  );
+};

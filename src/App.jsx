@@ -3,21 +3,20 @@ import {RoutesMain as Routes} from './routes';
 
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useState } from "react";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
-  const [userInfo, setUserInfo] = useState([]);
-
-  const [isLogged, setIsLogged] = useState(false)
-
   return (
     <>
       <Global />
-      <Routes userInfo={userInfo} setUserInfo={setUserInfo} isLogged={isLogged} setIsLogged={setIsLogged}/>
+
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
 
       <ToastContainer
         position="top-right"
-        autoClose={3000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

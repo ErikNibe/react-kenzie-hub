@@ -1,14 +1,20 @@
 import { Navigate, Route, Routes } from "react-router-dom"
+import { ProtectedRoutes } from "../components/ProtectedRoutes"
 import { DashboardPage } from "../pages/DashboardPage"
 import { LoginPage } from "../pages/LoginPage"
 import { RegisterPage } from "../pages/RegisterPage"
 
-export const RoutesMain = ({ userInfo, setUserInfo, isLogged, setIsLogged }) => {
+export const RoutesMain = () => {
     return (
         <Routes>
-            <Route path="/login" element={<LoginPage setUserInfo={setUserInfo} setIsLogged={setIsLogged} />} />
-            <Route path="/dashboard" element={<DashboardPage userInfo={userInfo} isLogged={isLogged} setIsLogged={setIsLogged} setUserInfo={setUserInfo} />} />
+            <Route path="/login" element={<LoginPage />} />
+            
             <Route path="/register" element={<RegisterPage />} />
+
+            <Route element={<ProtectedRoutes />}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+            </Route>
+
             <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
     )

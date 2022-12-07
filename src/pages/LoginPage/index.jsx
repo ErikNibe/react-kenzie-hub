@@ -1,4 +1,5 @@
 import Logo from "../../assets/Logo.svg";
+import { ImgLogo } from "../../styles/ImgLogo";
 
 import { Container } from "../../styles/Container";
 import { FormContainer } from "../../styles/FormContainer";
@@ -11,55 +12,17 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "./loginSchema";
 
-import { api } from "../../api/api";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
-import { toast } from "react-toastify";
+export const LoginPage = () => {
 
-import { useNavigate } from "react-router-dom";
-import { ImgLogo } from "../../styles/ImgLogo";
-
-import { useState } from "react";
-
-export const LoginPage = ({ setUserInfo, setIsLogged }) => {
-    const navigate = useNavigate();
-
-    const [loading, setLoading] = useState(false);
+    const { userLogin, loading } = useContext(AuthContext)
     
     const { register, handleSubmit, reset, formState: {errors} } = useForm({
         mode: "onChange",
         resolver: yupResolver(loginSchema)
     });
-
-    const userLogin = async (data) => {
-        try {
-            setLoading(true);
-
-            const response = await api.post("/sessions", data);
-
-            if(response.status === 200){
-                toast.success("Login realizado com sucesso, você será redirecionado automaticamente");
-                
-                window.localStorage.clear();
-                window.localStorage.setItem("@TOKEN", response.data.token);
-                window.localStorage.setItem("@USERID", response.data.user.id);
-                
-                setIsLogged(true);
-                setUserInfo(response.data.user);
-
-                setTimeout(() => navigate("/dashboard"), 4000);
-            }
-            
-
-        } catch (error) {
-
-            toast.error("O email ou a senha estão incorretos");
-
-        } finally {
-
-            setLoading(false);
-            
-        }
-    }
     
     const submit = async (data) => {
         await userLogin(data);
