@@ -17,7 +17,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 
 export const LoginPage = () => {
 
-    const { userLogin, loading } = useContext(AuthContext)
+    const { userLogin, loading, navigate } = useContext(AuthContext)
     
     const { register, handleSubmit, reset, formState: {errors} } = useForm({
         mode: "onChange",

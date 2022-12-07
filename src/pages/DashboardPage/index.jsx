@@ -15,9 +15,7 @@ import { ImgLogo } from "../../styles/ImgLogo";
 import { Button } from "../../styles/Button";
 import { Modal } from "../../components/Modal/Modal";
 
-import { Navigate } from "react-router-dom";
-
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 
 export const DashboardPage = () => {

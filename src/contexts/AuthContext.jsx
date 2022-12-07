@@ -3,7 +3,7 @@ import { createContext } from "react";
 import { api } from "../api/api";
 
 import { toast } from "react-toastify";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext({});
 
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ userLogin, loading, userInfo, setUserInfo, searching }}>
+        <AuthContext.Provider value={{ userLogin, loading, userInfo, setUserInfo, searching, navigate }}>
             { children }
         </AuthContext.Provider>
     )
