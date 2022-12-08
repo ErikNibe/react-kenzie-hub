@@ -89,7 +89,7 @@ export const Modal = ({ addTechs, setAddTechs, setOpenModal, techInfo, setTechIn
                         id="title"
                         placeholder="Digite o nome do projeto"
                         {...register("title")}
-                        value={techInfo ? techInfo.title : ""}
+                        value={techInfo && techInfo.title}
                     />
                     {errors.title && <span>{errors.title.message}</span>}
 
