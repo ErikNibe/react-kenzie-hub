@@ -21,7 +21,6 @@ export const Modal = () => {
         
         if(addTechs){
             await createTech(data);
-            console.log("criou")
         }
         else {
             await changeTech(data);
