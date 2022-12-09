@@ -15,7 +15,7 @@ export const RoutesMain = () => {
                 <Route path="/dashboard" element={<DashboardPage />} />
             </Route>
 
-            <Route path="*" element={<Navigate to="/login" />} />
+            <Route path="*" element={<LoginPage />} />
         </Routes>
     )
 }
