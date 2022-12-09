@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useContext } from "react";
 import { useForm } from "react-hook-form"
-import { toast } from "react-toastify";
-import { api } from "../../api/api";
+import { TechContext } from "../../contexts/TechContext";
 import { Button } from "../../styles/Button";
 import { FormContainer } from "../../styles/FormContainer";
 import { Input } from "../../styles/Input";
@@ -9,66 +9,33 @@ import { LabelText } from "../../styles/Label";
 import { modalSchema } from "./modalSchema";
 import { ModalBackground, ModalContainer, Select } from "./styles"
 
-export const Modal = ({ addTechs, setAddTechs, setOpenModal, techInfo, setTechInfo }) => {
+export const Modal = () => {
     
+    const { addTechs, setAddTechs, setOpenModal, techInfo, setTechInfo, createTech, changeTech, deleteTech } = useContext(TechContext);
+
     const { register, handleSubmit, formState: {errors} } = useForm({
         resolver: yupResolver(modalSchema)
     });
-
-    const createTech = async (data) => {
-        try {
-            const response = await api.post("/users/techs", data);    
-            
-            if(response.status === 201){
-                toast.success("A tecnologia foi criada com sucesso");
-            }
-
-        } catch (error) {
-            toast.error("Desculpe, algo deu errado!");
-        }
-    }
-
-    const changeTech = async (data) => {
-        try {
-            const response = await api.put(`/users/techs/${techInfo.id}`, data);
-
-            if(response.status === 201){
-                toast.success("A tecnologia foi alterada com sucesso");
-            }
-
-        } catch (error) {
-            toast.error("Desculpe, algo deu errado!");
-        }
-    }
-
-    const deleteTech = async () => {
-        try {
-            const response = await api.delete(`/users/techs/${techInfo.id}`);
-
-            toast.success("Tecnologia deletada com sucesso");
-
-            setOpenModal(false);
-        } catch (error) {
-            console.error(error)
-        }
-    }
 
     const submit = async (data) => {
         
         if(addTechs){
             await createTech(data);
+            console.log("criou")
         }
         else {
             await changeTech(data);
         }
 
+        setAddTechs(false);
+
         setOpenModal(false);
     }
 
     const closeModal = () => {
-        setOpenModal(false);
-
         setAddTechs(false);
+
+        setOpenModal(false);
 
         setTechInfo(null);
     }
@@ -77,7 +44,7 @@ export const Modal = ({ addTechs, setAddTechs, setOpenModal, techInfo, setTechIn
         <ModalBackground>
             <ModalContainer>
                 <div className="modal__header">
-                    <h3>Cadastrar tecnologia</h3>
+                    <h3>{addTechs ? "Cadastrar tecnologias" : "Tecnologia Detalhes"}</h3>
 
                     <button onClick={() => closeModal()}>X</button>
                 </div>
@@ -89,7 +56,7 @@ export const Modal = ({ addTechs, setAddTechs, setOpenModal, techInfo, setTechIn
                         id="title"
                         placeholder="Digite o nome do projeto"
                         {...register("title")}
-                        value={techInfo && techInfo.title}
+                        value={techInfo ? techInfo.title : undefined}
                     />
                     {errors.title && <span>{errors.title.message}</span>}
 

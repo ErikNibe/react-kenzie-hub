@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthContext";
+import { UserContext } from "../../contexts/UserContext";
 
 export const ProtectedRoutes = () => {
-    const { userInfo, searching } = useContext(AuthContext);
+    const { userInfo, searching } = useContext(UserContext);
 
     if(searching){
         return null;

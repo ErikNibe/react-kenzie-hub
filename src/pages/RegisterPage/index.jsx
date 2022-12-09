@@ -4,8 +4,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "./registerSchema";
 
-import { toast } from "react-toastify";
-
 import { HeaderContainer, Select } from "./styles";
 import { Container } from "../../styles/Container";
 import { ImgLogo } from "../../styles/ImgLogo";
@@ -15,41 +13,16 @@ import { LabelText } from "../../styles/Label";
 import { Input } from "../../styles/Input";
 import { Anchor } from "../../styles/Anchor";
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { api } from "../../api/api";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
 export const RegisterPage = () => {
-    const navigate = useNavigate();
-
-    const [loading, setLoading] = useState(false);
+    const {userRegister, loading, navigate} = useContext(UserContext);
 
     const { register, handleSubmit, reset, formState: {errors} } = useForm({
         mode: "onChange",
         resolver: yupResolver(loginSchema)
     })
-
-    const userRegister = async (data) => {
-        try {
-            setLoading(true);
-
-            const response = await api.post("/users", data);
-            
-            if(response.data){
-                toast.success("Conta criada com sucesso, você será redirecionado para a página de login automaticamente");
-
-                setTimeout(() => navigate("/login"), 4000)
-            }
-        } catch (error) {
-
-            toast.error("Ops! Algo deu errado");
-
-        } finally {
-
-            setLoading(false);
-            
-        }
-    }
 
     const submit = async (data) => {
         delete data.confirmPassword;
@@ -58,6 +31,8 @@ export const RegisterPage = () => {
 
         reset();
     }
+
+    
 
     return (
         <Container>

@@ -13,11 +13,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "./loginSchema";
 
 import { useContext } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
+import { UserContext } from "../../contexts/UserContext";
 
 export const LoginPage = () => {
 
-    const { userLogin, loading, navigate } = useContext(AuthContext)
+    const { userLogin, loading, navigate } = useContext(UserContext)
     
     const { register, handleSubmit, reset, formState: {errors} } = useForm({
         mode: "onChange",

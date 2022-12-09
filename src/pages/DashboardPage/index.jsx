@@ -15,17 +15,15 @@ import { ImgLogo } from "../../styles/ImgLogo";
 import { Button } from "../../styles/Button";
 import { Modal } from "../../components/Modal/Modal";
 
-import { useContext, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { TechContext } from "../../contexts/TechContext";
 
 export const DashboardPage = () => {
 
-  const { userInfo, setUserInfo } = useContext(AuthContext);
+  const { userInfo, setUserInfo } = useContext(UserContext);
   
-  const [addTechs, setAddTechs] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-
-  const [techInfo, setTechInfo] = useState(null)
+  const { setAddTechs, openModal, setOpenModal, setTechInfo } = useContext(TechContext);
   
   const handleLogout = () => {
     localStorage.clear();
@@ -75,8 +73,8 @@ export const DashboardPage = () => {
             <TechList>
               {userInfo.techs.map((tech) => (
                 <TechItem key={tech.id} onClick={() => {
-                  setOpenModal(true);
                   setTechInfo(tech);
+                  setOpenModal(true);
                 }}>
                   <h4>{tech.title}</h4>
 
@@ -92,7 +90,7 @@ export const DashboardPage = () => {
         </TechContainer>
       </Main>
 
-      { openModal && <Modal addTechs={addTechs} setAddTechs={setAddTechs} setOpenModal={setOpenModal} techInfo={techInfo} setTechInfo={setTechInfo}/>}
+      { openModal && <Modal />}
     </>
   );
 };

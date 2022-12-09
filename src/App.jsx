@@ -3,16 +3,19 @@ import {RoutesMain as Routes} from './routes';
 
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AuthProvider } from "./contexts/AuthContext";
+import { UserProvider } from "./contexts/UserContext";
+import { TechProvider } from "./contexts/TechContext";
 
 function App() {
   return (
     <>
       <Global />
 
-      <AuthProvider>
-        <Routes />
-      </AuthProvider>
+      <UserProvider>
+        <TechProvider>
+          <Routes />
+        </TechProvider>
+      </UserProvider>
 
       <ToastContainer
         position="top-right"
