@@ -22,17 +22,19 @@ export const UserProvider = ({ children }) => {
 
             if(!token) {
                 setSearching(false);
-
+                
                 return;
             }
-
+            
             try {
                 api.defaults.headers.common.authorization = `Bearer ${token}`;
 
                 const { data } = await api.get("/profile");
 
                 setUserInfo(data);
-                
+
+                navigate("/dashboard")
+                     
             } catch (error) {
                 console.error(error);
                 
